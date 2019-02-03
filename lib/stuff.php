@@ -27,7 +27,8 @@ function debug() {
 
 require_once __DIR__ . '/rest-api-stuff.php';
 require_feature_files();
-require_once __DIR__ . '/serverpilot-stuff.php';
+
+default_to_serverpilot();
 
 define( 'REST_API_NAMESPACE', 'jurassic.ninja' );
 define( 'COMPANION_PLUGIN_URL', 'https://github.com/Automattic/companion/archive/master.zip' );
@@ -268,6 +269,28 @@ function launch_wordpress( $php_version = 'default', $requested_features = [] ) 
 function create_slug( $str, $delimiter = '-' ) {
 	$slug = strtolower( trim( preg_replace( '/[\s-]+/', $delimiter, preg_replace( '/[^A-Za-z0-9-]+/', $delimiter, preg_replace( '/[&]/', 'and', preg_replace( '/[\']/', '', iconv( 'UTF-8', 'ASCII//TRANSLIT', $str ) ) ) ) ), $delimiter ) );
 	return $slug;
+}
+
+/**
+ * Returns the currently set engine used for launching sites
+ * @return String The engine. Defaults to `'serverpilot'`;
+ */
+function site_provisioner_provider() {
+	/**
+	 * Filters engine that will be used for launching sites.
+	 *
+	 * @param array $site_provisioner_provider. Defaults to `'serverpilot'`.
+	 */
+	return apply_filters( 'jurassic_ninja_site_provisioner_provide', 'serverpilot' );
+}
+
+/**
+ * Makes Jurassic Ninja default to using ServerPilot for launching sites
+ */
+function default_to_serverpilot() {
+	if ( 'serverpilot' === site_provisioner_provider() ) {
+		require_once __DIR__ . '/serverpilot-stuff.php';
+	}
 }
 
 /**
