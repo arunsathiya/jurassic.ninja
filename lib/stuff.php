@@ -505,7 +505,7 @@ function purge_sites() {
 	/**
 	 * Filters the array of users listed by ServerPilot
 	 *
-	 * @param array $users The users returend by serverpilot
+	 * @param array $users The users returned by serverpilot
 	 */
 	$system_users = apply_filters( 'jurassic_ninja_sysuser_list', [] );
 	if ( is_wp_error( $system_users ) ) {
